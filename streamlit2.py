@@ -12,19 +12,21 @@ import pandas as pd
 
 st.title("Police Incident Reports from 2018 to 2020 in San Francisco")
 
-df= pd.read_csv("https://drive.google.com/drive/u/1/folders/1Hd2HOFknGccrm11VSdDp5N9-ADkboWvZ")
+df = pd.read_csv("https://drive.google.com/file/d/1ioUp8979nNLh9h-CYVyJcRgAhxBhCLIm/view")
 
 st.markdown("The data shown below belongs to incident reports in the city of San Francisco, from the year 2018 to 2020, with details from each case such as date, day of the week, police district, neighborhood in which it happened, type of incident in category and subcategory, exact location and resolution.")
 
-#Coordenadas
-#sf_lat = 37.7749
-#sf_lon = -122.4194
-mapa=pd.DataFrame(df['Latitude'],df['Longitude'])
-#mapa=pd.DataFrame()
-mapa=mapa.dropna()
-#sf_df= pd.DataFrame({'lat':[sf_lat],'lon':[sf_lon]})
-#st.map(sf_df, zoom=12)
-st.map(mapa.astype(int), zoom=12)
+# Display the DataFrame
+st.write(df)
+
+# Create a DataFrame with Latitude and Longitude columns
+mapa = df[["Latitude", "Longitude"]]
+
+# Drop rows with missing latitude and longitude values
+mapa = mapa.dropna()
+
+# Display the map
+st.map(mapa)
 
 
 
