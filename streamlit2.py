@@ -17,13 +17,14 @@ df= pd.read_csv("https://drive.google.com/drive/u/1/folders/1Hd2HOFknGccrm11VSdD
 st.markdown("The data shown below belongs to incident reports in the city of San Francisco, from the year 2018 to 2020, with details from each case such as date, day of the week, police district, neighborhood in which it happened, type of incident in category and subcategory, exact location and resolution.")
 
 #Coordenadas
-sf_lat = 37.7749
-sf_lon = -122.4194
-
+#sf_lat = 37.7749
+#sf_lon = -122.4194
+mapa=pd.DataFrame(df['Latitude'],df['Longitude'])
 #mapa=pd.DataFrame()
-#mapa=mapa.dropna()
-sf_df= pd.DataFrame({'lat':[sf_lat],'lon':[sf_lon]})
-st.map(sf_df, zoom=12)
+mapa=mapa.dropna()
+#sf_df= pd.DataFrame({'lat':[sf_lat],'lon':[sf_lon]})
+#st.map(sf_df, zoom=12)
+st.map(mapa.astype(int), zoom=12)
 
 
 
