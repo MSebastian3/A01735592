@@ -9,6 +9,7 @@ Original file is located at
 
 import streamlit as st
 import pandas as pd
+from geopy.geocoders import Nominatim
 
 st.title("Police Incident Reports from 2018 to 2020 in San Francisco")
 
@@ -19,13 +20,18 @@ st.markdown("The data shown below belongs to incident reports in the city of San
 # Display the DataFrame
 st.write(df)
 
-# Check if Latitude and Longitude columns exist
-if "Latitude" in df.columns and "Longitude" in df.columns:
-    # Create a new DataFrame with non-null Latitude and Longitude values
-    mapa = df.dropna(subset=["Latitude", "Longitude"])[["Latitude", "Longitude"]]
-    # Display the map
-    st.map(mapa.astype(float))
-else:
-    st.warning("Latitude and Longitude columns are missing in the DataFrame.")
+# Geocode addresses to obtain latitude and longitude
+geolocator = Nominatim(user_agent="my_app")
+df["Location"] = df["Intersection"].fillna("") + ", " + df["Police District"]
+df["Location"] = df["Location"].apply(geolocator.geocode)
+df["Latitude"] = df["Location"].apply(lambda loc: loc.latitude if loc else None)
+df["Longitude"] = df["Location"].apply(lambda loc: loc.longitude if loc else None)
+
+# Drop rows with missing latitude and longitude values
+mapa = df.dropna(subset=["Latitude", "Longitude"])[["Latitude", "Longitude"]]
+
+# Display the map
+st.map(mapa.astype(float))
+
 
 
