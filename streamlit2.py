@@ -9,7 +9,8 @@ Original file is located at
 
 import streamlit as st
 import pandas as pd
-from geopy.geocoders import Nominatim
+import geopandas as gpd
+from geopandas.tools import geocode
 
 st.title("Police Incident Reports from 2018 to 2020 in San Francisco")
 
@@ -20,18 +21,20 @@ st.markdown("The data shown below belongs to incident reports in the city of San
 # Display the DataFrame
 st.write(df)
 
-# Geocode addresses to obtain latitude and longitude
-geolocator = Nominatim(user_agent="my_app")
-df["Location"] = df["Intersection"].fillna("") + ", " + df["Police District"]
-df["Location"] = df["Location"].apply(geolocator.geocode)
-df["Latitude"] = df["Location"].apply(lambda loc: loc.latitude if loc else None)
-df["Longitude"] = df["Location"].apply(lambda loc: loc.longitude if loc else None)
+# Create a new DataFrame with non-null Intersection and Police District values
+address_df = df.dropna(subset=["Intersection", "Police District"])[["Intersection", "Police District"]]
+
+# Geocode the addresses to obtain latitude and longitude
+geocoded = geocode(address_df["Intersection"] + ", " + address_df["Police District"], provider="nominatim")
+
+# Merge the geocoded data with the original DataFrame
+df = pd.merge(df, geocoded, left_index=True, right_index=True)
 
 # Drop rows with missing latitude and longitude values
-mapa = df.dropna(subset=["Latitude", "Longitude"])[["Latitude", "Longitude"]]
+mapa = df.dropna(subset=["geometry"])[["geometry"]]
 
 # Display the map
-st.map(mapa.astype(float))
+st.map(mapa)
 
 
 
