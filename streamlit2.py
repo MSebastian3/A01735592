@@ -19,12 +19,12 @@ st.markdown("The data shown below belongs to incident reports in the city of San
 # Display the DataFrame
 st.write(df)
 
-# Check if Latitude and Longitude columns exist
-if "Latitude" in df.columns and "Longitude" in df.columns:
+# Check if Latitude and Longitude columns exist and have valid values
+if "Latitude" in df.columns and "Longitude" in df.columns and not df["Latitude"].isnull().all() and not df["Longitude"].isnull().all():
     # Create a new DataFrame with non-null Latitude and Longitude values
-    mapa = df.dropna(subset=["Latitude", "Longitude"])[["Latitude", "Longitude"]]
+    mapa = df[["Latitude", "Longitude"]].dropna()
     # Display the map
     st.map(mapa.astype(float))
 else:
-    st.warning("Latitude and Longitude columns are missing in the DataFrame.")
+    st.warning("Unable to display the map. Latitude and Longitude data is missing or incomplete.")
 
