@@ -9,32 +9,16 @@ Original file is located at
 
 import streamlit as st
 import pandas as pd
-import geopandas as gpd
-from geopandas.tools import geocode
 
 st.title("Police Incident Reports from 2018 to 2020 in San Francisco")
 
-df = pd.read_csv("https://drive.google.com/uc?id=11oLcKiW8SgCOp3tGiQCYuRG7pLL_J-Zf")
+df= pd.read_csv("https://drive.google.com/file/d/11oLcKiW8SgCOp3tGiQCYuRG7pLL_J-Zf/view?usp=drive_link")
 
 st.markdown("The data shown below belongs to incident reports in the city of San Francisco, from the year 2018 to 2020, with details from each case such as date, day of the week, police district, neighborhood in which it happened, type of incident in category and subcategory, exact location and resolution.")
 
-# Display the DataFrame
-st.write(df)
-
-# Create a new DataFrame with non-null Intersection and Police District values
-address_df = df.dropna(subset=["Intersection", "Police District"])[["Intersection", "Police District"]]
-
-# Geocode the addresses to obtain latitude and longitude
-geocoded = geocode(address_df["Intersection"] + ", " + address_df["Police District"], provider="nominatim")
-
-# Merge the geocoded data with the original DataFrame
-df = pd.merge(df, geocoded, left_index=True, right_index=True)
-
-# Drop rows with missing latitude and longitude values
-mapa = df.dropna(subset=["geometry"])[["geometry"]]
-
-# Display the map
-st.map(mapa)
+mapa=pd.DataFrame()
+mapa=mapa.dropna()
+st.map(mapa.astype(int))
 
 
 
