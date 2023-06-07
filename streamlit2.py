@@ -12,24 +12,24 @@ import pandas as pd
 
 st.title("Police Incident Reports from 2018 to 2020 in San Francisco")
 
-# Read the CSV file from the Google Drive link
-file_id = "1ioUp8979nNLh9h-CYVyJcRgAhxBhCLIm"
-download_url = f"https://drive.google.com/uc?id={file_id}"
-df = pd.read_csv(download_url)
+df= pd.read_csv("Police_Department_Incident_Reports__2018_to_Present")
 
 st.markdown("The data shown below belongs to incident reports in the city of San Francisco, from the year 2018 to 2020, with details from each case such as date, day of the week, police district, neighborhood in which it happened, type of incident in category and subcategory, exact location and resolution.")
 
-# Display the DataFrame
-st.write(df)
+mapa=pd.DataFrame()
 
-# Create a DataFrame with Latitude and Longitude columns
-mapa = df[["Latitude", "Longitude"]]
+mapa['Date'] = df['Incident Date']
+mapa['Day'] = df['Incident Day of Week']
+mapa['Police District'] = df['Police District']
+mapa['Neighborhood'] = df['Analysis Neighborhood']
+mapa['Incident Category'] = df['Incident Category']
+mapa['Incident Subcategory'] = df['Incident Subcategory']
+mapa['Resolution'] = df['Resolution']
+mapa['lat'] = df['Latitude']
+mapa['lon'] = df['Longitude']
 
-# Drop rows with missing latitude and longitude values
 mapa = mapa.dropna()
 
-# Display the map
-st.map(mapa)
 
 
 
