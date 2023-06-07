@@ -27,9 +27,9 @@ mapa['Incident Subcategory'] = df['Incident Subcategory']
 mapa['Resolution'] = df['Resolution']
 mapa['lat'] = df['Latitude']
 mapa['lon'] = df['Longitude']
-mapa = pd.DataFrame(['Latitude'],df[Longitude])
+mapa = pd.DataFrame(['Latitude'],df['Longitude'])
 mapa = mapa.dropna()
-
+st.map(mapa.astype(int))
 
 
 
